@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance Form</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 30px 35px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 25px;
+    }
+
+    form label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+
+    form input,
+    form select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    form button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #218838;
+    }
+
+    /* Toast styles */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      font-size: 14px;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .toast.error {
+      background-color: #dc3545;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Submit Attendance</h1>
+    <form method="POST">
+      <label>Student Name</label>
+      <input type="text" name="student_name" required placeholder="e.g. John Doe">
+
+      <label>Student ID (e.g. 919123456)</label>
+      <input type="text" name="student_number" required pattern="919[0-9]{6}" maxlength="9" placeholder="919 + 6 digits">
+
+      <label>Section</label>
+      <input type="text" name="section" required>
+
+      <label>Subject</label>
+      <input type="text" name="subject" required>
+
+      <label>Status</label>
+      <select name="status" required>
+        <option value="">Select...</option>
+        <option value="Present">Present</option>
+        <option value="Absent">Absent</option>
+      </select>
+
+      <label>Date</label>
+      <input type="date" name="date" required>
+
+      <button type="submit">✅ Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function showToast(message, type = 'success', redirectAfter = null) {
+      const toast = document.getElementById("toast");
+      toast.innerText = message;
+      toast.className = `toast show ${type}`;
+      
+      setTimeout(() => {
+        toast.className = "toast";
+        if (redirectAfter) {
+          window.location.href = redirectAfter;
+        }
+      }, 3000); // 3 sec toast then redirect
+    }
+  </script>
+  
+  {% if message %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      showToast("{{ message }}", "{{ category or 'success' }}", "{{ redirect_url or '' }}");
+    });
+  </script>
+  {% endif %}
+  
+
+
+</body>
+</html>

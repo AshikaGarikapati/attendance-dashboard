@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Grades</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      padding: 40px;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    h2 {
+      text-align: center;
+      color: #6f42c1;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    a.btn {
+      padding: 6px 12px;
+      text-decoration: none;
+      font-size: 13px;
+      border-radius: 6px;
+      margin: 0 2px;
+      font-weight: 600;
+    }
+    .edit-btn { background-color: #ffc107; color: #000; }
+    .delete-btn { background-color: #dc3545; color: #fff; }
+    .edit-btn:hover, .delete-btn:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🗂️ All Grades</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Student ID</th>
+        <th>Subject</th>
+        <th>Grade</th>
+        <th>Action</th>
+      </tr>
+      {% for id, student_number, subject, grade in grades %}
+      <tr>
+        <td>{{ id }}</td>
+        <td>{{ student_number }}</td>
+        <td>{{ subject }}</td>
+        <td>{{ grade }}</td>
+        <td>
+          <a href="/edit-grade/{{ id }}" class="btn edit-btn">✏️ Edit</a>
+          <a href="/delete-grade/{{ id }}" class="btn delete-btn" onclick="return confirm('Are you sure?')">❌ Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <br>
+    <a href="/dashboard">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

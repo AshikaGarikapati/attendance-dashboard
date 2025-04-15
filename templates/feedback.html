@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit Feedback</title>
+  <style>
+    body { font-family: 'Segoe UI'; background: #f4f6f8; padding: 40px; }
+    .container {
+      max-width: 500px; margin: auto; background: white;
+      padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    h2 { text-align: center; color: #007bff; margin-bottom: 20px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, textarea {
+      width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc;
+      border-radius: 6px; font-size: 14px;
+    }
+    button {
+      width: 100%; margin-top: 20px; padding: 12px;
+      background: #007bff; color: white; font-weight: bold;
+      border: none; border-radius: 6px; font-size: 16px; cursor: pointer;
+    }
+    .toast {
+      padding: 10px 15px; background: #28a745; color: white;
+      border-radius: 6px; margin-bottom: 10px; text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🗣️ Submit Feedback</h2>
+    {% if message %}
+      <div class="toast">{{ message }}</div>
+    {% endif %}
+    <form method="POST">
+      <label>Subject</label>
+      <input type="text" name="subject" required placeholder="e.g. Site Performance">
+
+      <label>Comment</label>
+      <textarea name="comment" rows="5" required placeholder="Write your feedback..."></textarea>
+
+      <button type="submit">✅ Submit Feedback</button>
+    </form>
+    <br>
+    <a href="/user">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

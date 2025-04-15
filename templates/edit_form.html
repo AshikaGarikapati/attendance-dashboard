@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Attendance</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #007bff;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 10px;
+      font-weight: 500;
+      color: #444;
+    }
+
+    input, select {
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #007bff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>✏️ Edit Attendance Record</h2>
+    <form method="POST">
+      <label>Student Name</label>
+      <input type="text" name="student_name" value="{{ record[1] }}" required>
+
+      <label>Student ID</label>
+      <input type="text" name="student_number" value="{{ record[2] }}" required pattern="919[0-9]{6}" maxlength="9">
+
+      <label>Section</label>
+      <input type="text" name="section" value="{{ record[3] }}" required>
+
+      <label>Subject</label>
+      <input type="text" name="subject" value="{{ record[4] }}" required>
+
+      <label>Status</label>
+      <select name="status" required>
+        <option value="Present" {% if record[5] == "Present" %}selected{% endif %}>Present</option>
+        <option value="Absent" {% if record[5] == "Absent" %}selected{% endif %}>Absent</option>
+      </select>
+
+      <label>Date</label>
+      <input type="date" name="date" value="{{ record[6] }}" required>
+
+      <button type="submit">✅ Update</button>
+    </form>
+    <a href="/dashboard">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feedback Submissions</title>
+  <style>
+    body { font-family: 'Segoe UI'; background: #f4f6f8; padding: 40px; }
+    .container {
+      max-width: 800px; margin: auto; background: white;
+      padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    h2 { text-align: center; color: #20c997; }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 20px;
+    }
+    th, td {
+      padding: 12px; border-bottom: 1px solid #ddd; text-align: left;
+    }
+    th {
+      background: #20c997; color: white;
+    }
+    tr:hover { background-color: #f1f1f1; }
+    a { display: inline-block; margin-top: 20px; text-decoration: none; color: #007bff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📝 User Feedback</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Subject</th>
+        <th>Comment</th>
+        <th>Date</th>
+      </tr>
+      {% for id, username, subject, comment, created_at in feedbacks %}
+      <tr>
+        <td>{{ id }}</td>
+        <td>{{ username }}</td>
+        <td>{{ subject }}</td>
+        <td>{{ comment }}</td>
+        <td>{{ created_at }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <a href="/dashboard">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

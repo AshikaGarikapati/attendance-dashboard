@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Grade</title>
+</head>
+<body>
+  <div class="container">
+    <h2>✏️ Edit Grade</h2>
+    <form method="POST">
+      <p><strong>Student ID:</strong> {{ record[1] }}</p>
+
+      <label>Subject:</label>
+      <input type="text" name="subject" value="{{ record[2] }}" required>
+
+      <label>Grade:</label>
+      <select name="grade" required>
+        <option value="A" {% if record[3] == "A" %}selected{% endif %}>A</option>
+        <option value="B" {% if record[3] == "B" %}selected{% endif %}>B</option>
+        <option value="C" {% if record[3] == "C" %}selected{% endif %}>C</option>
+        <option value="D" {% if record[3] == "D" %}selected{% endif %}>D</option>
+        <option value="F" {% if record[3] == "F" %}selected{% endif %}>F</option>
+      </select>
+
+      <button type="submit">✅ Update</button>
+    </form>
+    <a href="/admin-grades">← Back to Grades</a>
+  </div>
+</body>
+</html>

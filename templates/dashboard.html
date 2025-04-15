@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1000px;
+        margin: auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+      }
+      .logout-btn {
+        float: right;
+        margin-top: -40px;
+        background: #dc3545;
+        color: white;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 22px;
+        margin: 0 5px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s ease-in-out;
+      }
+      .btn:hover {
+        opacity: 0.95;
+        transform: scale(1.03);
+      }
+      .view-btn-lg { background-color: #007bff; }
+      .add-grade-btn-lg { background-color: #6f42c1; }
+      .view-grades-btn { background-color: #20c997; }
+      .view-feedback-btn { background-color: #17a2b8; }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+        font-size: 15px;
+      }
+      th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+      }
+      th { background-color: #007bff; color: white; }
+      tr:hover { background-color: #f1f1f1; }
+      .btn.edit { background-color: #ffc107; color: #212529; }
+      .btn.delete { background-color: #dc3545; }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 25px;
+        border: 1px solid #888;
+        width: 400px;
+        border-radius: 10px;
+        position: relative;
+      }
+      .modal-content h2 {
+        margin-top: 0;
+        color: #007bff;
+      }
+      .close-btn {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      #student-table { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📊 Admin Dashboard</h1>
+      <a href="/logout" class="logout-btn">Logout</a>
+
+      <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-bottom: 25px;">
+        <button class="btn view-btn-lg" onclick="document.getElementById('filter-panel').style.display='block'; document.getElementById('student-table').style.display='table';">
+          📂 View Student Details
+        </button>
+        <a href="/add-grade" class="btn add-grade-btn-lg">➕ Add Grades</a>
+        <a href="/admin-grades" class="btn view-grades-btn">📋 View Grades</a>
+        <a href="/view-feedback" class="btn view-feedback-btn">📩 View Feedback</a>
+      </div>
+
+      <div id="filter-panel" style="display: none; margin-top: 30px">
+        <input type="text" id="searchInput" placeholder="Search by student name..." style="padding: 8px; width: 250px; border-radius: 6px; border: 1px solid #ccc;" />
+        <select id="sectionFilter" style="padding: 8px; margin-left: 10px; border-radius: 6px">
+          <option value="">All Sections</option>
+          {% for row in records %}<option value="{{ row[2] }}">{{ row[2] }}</option>{% endfor %}
+        </select>
+        <select id="subjectFilter" style="padding: 8px; margin-left: 10px; border-radius: 6px">
+          <option value="">All Subjects</option>
+          {% for row in records %}<option value="{{ row[3] }}">{{ row[3] }}</option>{% endfor %}
+        </select>
+      </div>
+
+      <table id="student-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Student Name</th><th>Student ID</th><th>Section</th><th>Subject</th><th>Status</th><th>Date</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in records %}
+          <tr>
+            <td>{{ row[0] }}</td><td>{{ row[1] }}</td><td>{{ row[2] }}</td><td>{{ row[3] }}</td><td>{{ row[4] }}</td><td>{{ row[5] }}</td><td>{{ row[6] }}</td>
+            <td>
+              <button class="btn view" onclick="showDetails('{{ row[6] }}', '{{ row[1] }}', '{{ row[2] }}', '{{ row[3] }}', '{{ row[4] }}', '{{ row[5] }}')">🔍 View</button>
+              <a href="/edit/{{ row[0] }}" class="btn edit">✏️ Edit</a>
+              <a href="/delete/{{ row[0] }}" class="btn delete" onclick="return confirm('Are you sure you want to delete this record?')">❌ Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="detailModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>📘 Student Attendance Details</h2>
+        <p><strong>Student Name:</strong> <span id="modal-name"></span></p>
+        <p><strong>Student ID:</strong> <span id="modal-student"></span></p>
+        <p><strong>Section:</strong> <span id="modal-section"></span></p>
+        <p><strong>Subject:</strong> <span id="modal-subject"></span></p>
+        <p><strong>Status:</strong> <span id="modal-status"></span></p>
+        <p><strong>Date:</strong> <span id="modal-date"></span></p>
+      </div>
+    </div>
+
+    <script>
+      function showDetails(name, student, section, subject, status, date) {
+        document.getElementById("modal-name").innerText = name;
+        document.getElementById("modal-student").innerText = student;
+        document.getElementById("modal-section").innerText = section;
+        document.getElementById("modal-subject").innerText = subject;
+        document.getElementById("modal-status").innerText = status;
+        document.getElementById("modal-date").innerText = date;
+        document.getElementById("detailModal").style.display = "block";
+      }
+      function closeModal() {
+        document.getElementById("detailModal").style.display = "none";
+      }
+      window.onclick = function (event) {
+        const modal = document.getElementById("detailModal");
+        if (event.target == modal) closeModal();
+      };
+      function filterTable() {
+        const search = document.getElementById("searchInput").value.toLowerCase();
+        const section = document.getElementById("sectionFilter").value.toLowerCase();
+        const subject = document.getElementById("subjectFilter").value.toLowerCase();
+        const rows = document.querySelectorAll("#student-table tbody tr");
+        rows.forEach((row) => {
+          const cells = row.getElementsByTagName("td");
+          const student = cells[1].innerText.toLowerCase();
+          const rowSection = cells[2].innerText.toLowerCase();
+          const rowSubject = cells[3].innerText.toLowerCase();
+          const matchSearch = student.includes(search);
+          const matchSection = !section || rowSection === section;
+          const matchSubject = !subject || rowSubject === subject;
+          row.style.display = (matchSearch && matchSection && matchSubject) ? "" : "none";
+        });
+      }
+      document.getElementById("searchInput").addEventListener("input", filterTable);
+      document.getElementById("sectionFilter").addEventListener("change", filterTable);
+      document.getElementById("subjectFilter").addEventListener("change", filterTable);
+    </script>
+  </body>
+</html>
